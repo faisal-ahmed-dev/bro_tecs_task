@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { ThemeProvider } from "next-themes";
+import Sidebar from "./layouts/sidebar";
+import Topbar from "./layouts/Topbar";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -28,7 +31,19 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <ThemeProvider attribute="class">
+          {/* Sidebar */}
+          <Sidebar />
+
+          {/* Main Content */}
+          <div className="ml-64">
+            {/* Topbar */}
+            <Topbar />
+
+            {/* Page Content */}
+            <main className="p-4">{children}</main>
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

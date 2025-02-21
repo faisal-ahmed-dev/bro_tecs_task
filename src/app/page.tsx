@@ -1,8 +1,8 @@
 
 export default function Home() {
   return (
-    <div className="">
-    
+    <div>
+      <h1>Welcome to My App</h1>
     </div>
   );
 }
