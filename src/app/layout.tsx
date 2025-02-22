@@ -12,7 +12,7 @@ const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
     <html lang="en">
       <body className="flex h-screen ">
-        <ThemeProvider attribute="class">
+        <ThemeProvider attribute="class" >
           <Sidebar />
           <div className="flex flex-col flex-1">
             <TopNav />

@@ -12,7 +12,7 @@ const Sidebar: React.FC = () => {
       {/* Desktop Sidebar */}
       <div className="hidden md:block">
         <div className="p-4 ml-1 text-2xl font-bold tracking-widest text-foreground">
-          GENPOS
+          
         </div>
         <nav className="mt-4 text-sm flex-1">
           <ul>

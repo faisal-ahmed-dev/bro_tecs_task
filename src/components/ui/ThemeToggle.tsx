@@ -1,17 +1,19 @@
-"use client"; // Mark as a client component since we're using hooks
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+// components/ThemeToggle.tsx
+"use client";
+
 import { Switch } from "@/components/ui/switch";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 export default function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const { theme, setTheme, mounted } = useThemeColor();
 
-  // Prevent hydration mismatch
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  // Handle theme toggle
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme); // Update next-themes and localStorage
+  };
 
+  // Prevent rendering until the component is mounted
   if (!mounted) {
     return null;
   }
@@ -21,7 +23,7 @@ export default function ThemeToggle() {
       <span className="text-sm">☀️</span>
       <Switch
         checked={theme === "dark"}
-        onCheckedChange={(checked) => setTheme(checked ? "dark" : "light")}
+        onCheckedChange={toggleTheme}
         aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} mode`}
       />
       <span className="text-sm">🌙</span>

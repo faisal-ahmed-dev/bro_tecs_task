@@ -29,8 +29,7 @@ const EmployeeFilters = ({
   departments,
 }: EmployeeFiltersProps) => {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6 transition-colors duration-300">
-      {/* Main Search Bar */}
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
       <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 h-5 w-5" />

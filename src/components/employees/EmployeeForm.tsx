@@ -20,7 +20,13 @@ import {
 import { Employee } from '@/types/employee';
 import Input from '../ui/Input';
 import { Button } from '../ui/Button';
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/Select';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Name is required'),
@@ -33,8 +39,9 @@ const formSchema = z.object({
   email: z.string().email('Invalid email address'),
   address: z.string().min(1, 'Address is required'),
   profilePicture: z.string().url('Invalid URL').optional().or(z.literal('')),
+  department: z.string().min(1, 'Department is required'),
+  status: z.enum(['active', 'inactive']),
 });
-
 
 interface EmployeeFormProps {
   open: boolean;
@@ -52,9 +59,12 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
       email: '',
       address: '',
       profilePicture: '',
+      department: '',
+      status: 'active',
     },
   });
 
+  // Reset form when employee changes
   useEffect(() => {
     if (employee) {
       form.reset({
@@ -63,6 +73,8 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
         email: employee.email,
         address: employee.address,
         profilePicture: employee.profilePicture || '',
+        department: employee.department,
+        status: (employee.status as 'active' | 'inactive'),
       });
     } else {
       form.reset();
@@ -77,7 +89,6 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
     onOpenChange(false);
   };
 
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[600px]">
@@ -89,6 +100,7 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+            {/* Profile Picture */}
             <FormField
               control={form.control}
               name="profilePicture"
@@ -106,6 +118,7 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
               )}
             />
 
+            {/* Name */}
             <FormField
               control={form.control}
               name="name"
@@ -120,6 +133,7 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
               )}
             />
 
+            {/* Phone */}
             <FormField
               control={form.control}
               name="phone"
@@ -134,6 +148,7 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
               )}
             />
 
+            {/* Email */}
             <FormField
               control={form.control}
               name="email"
@@ -148,6 +163,7 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
               )}
             />
 
+            {/* Address */}
             <FormField
               control={form.control}
               name="address"
@@ -162,15 +178,71 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
               )}
             />
 
-            <div className="flex justify-end gap-4 mt-6">
+            {/* Department */}
+            <FormField
+              control={form.control}
+              name="department"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Department</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select department" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Engineering">Engineering</SelectItem>
+                        <SelectItem value="Marketing">Marketing</SelectItem>
+                        <SelectItem value="Sales">Sales</SelectItem>
+                        <SelectItem value="HR">HR</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Status */}
+            <FormField
+              control={form.control}
+              name="status"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <FormControl>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active">Active</SelectItem>
+                        <SelectItem value="inactive">Inactive</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Buttons */}
+            <div className="flex flex-col sm:flex-row justify-end gap-4 mt-6">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => onOpenChange(false)}
+                className="w-full sm:w-auto"
               >
                 Cancel
               </Button>
-              <Button type="submit">
+              <Button type="submit" className="w-full sm:w-auto">
                 {employee ? 'Save Changes' : 'Add Employee'}
               </Button>
             </div>

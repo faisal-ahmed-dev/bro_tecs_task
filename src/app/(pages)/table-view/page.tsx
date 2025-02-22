@@ -41,7 +41,6 @@ const TablePage = () => {
       try {
         const response = await fetchEmployees();
         setEmployees(response.data);
-        // Extract unique departments
         const uniqueDepartments = Array.from(new Set(response.data.map(e => e.department))).filter(Boolean) as string[];
         setDepartments(uniqueDepartments);
       } catch (error) {

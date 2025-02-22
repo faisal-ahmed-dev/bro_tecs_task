@@ -31,6 +31,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs";
 import { Badge as UIBadge } from "@/components/ui/badge";
+import Image from 'next/image';
 
 interface EmployeeCardProps {
   employee: Employee;
@@ -59,14 +60,15 @@ export const EmployeeCard = ({ employee }: EmployeeCardProps) => {
       <>
         <div 
           onClick={() => setShowDetails(true)}
-          className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 w-64 h-40 p-4 cursor-pointer group relative border border-gray-100 dark:border-gray-700"
+          className="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md w-64 h-40 p-4 cursor-pointer group relative border border-gray-100 dark:border-gray-700"
         >
           <div className="flex items-start space-x-3">
-            {/* Profile Picture */}
             <div className="relative">
               {employee.profilePicture ? (
-                <img
+                <Image
                   src={employee.profilePicture}
+                  width={44}
+                  height={44}
                   alt={employee.name}
                   className="w-16 h-16 rounded-full object-cover border-2 border-primary/10 dark:border-primary/20 group-hover:scale-105 transition-transform duration-200"
                 />
@@ -77,7 +79,6 @@ export const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                   </span>
                 </div>
               )}
-              {/* Status Indicator */}
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="absolute bottom-0 right-0">
@@ -96,7 +97,6 @@ export const EmployeeCard = ({ employee }: EmployeeCardProps) => {
               </Tooltip>
             </div>
 
-            {/* Basic Info */}
             <div className="flex-1 space-y-2">
               <div>
                 <h3 className="text-base font-medium text-gray-900 dark:text-gray-100">
@@ -104,7 +104,7 @@ export const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                 </h3>
                 <UIBadge 
                   variant="secondary" 
-                  className={`mt-1 ${getDepartmentColor(employee.department)}`}
+                  className={`mt-1 transition-none ${getDepartmentColor(employee.department)}`}
                 >
                   {employee.department}
                 </UIBadge>
@@ -240,7 +240,6 @@ export const EmployeeCard = ({ employee }: EmployeeCardProps) => {
                         ? 'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300'
                         : 'bg-gray-500/10 text-gray-700 dark:bg-gray-500/20 dark:text-gray-300'
                     },
-                    // Example additional fields (you'd need to add these to your Employee type)
                     { icon: Calendar, label: 'Join Date', value: 'Jan 15, 2023' },
                     { icon: Clock, label: 'Work Schedule', value: 'Mon-Fri, 9:00-17:00' },
                     { icon: Briefcase, label: 'Employment Type', value: 'Full-time' },

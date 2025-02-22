@@ -1,4 +1,3 @@
-// app/employees/card/page.tsx
 "use client";
 
 import { useEffect, useState } from 'react';
@@ -7,6 +6,7 @@ import { fetchEmployees } from '@/services/employeeApi';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmployeeCard } from '@/components/EmployeeCard';
 import EmployeeFilters from '@/components/EmployeeFilters';
+import { PageHeader } from '@/components/ui/PageHeader';
 
 const CardViewPage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -62,7 +62,7 @@ const CardViewPage = () => {
     <div className="p-6">
       <div className="mb-6 space-y-4">
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Employee Directory</h1>
+          <PageHeader title="Employees" />
         </div>
         
         <EmployeeFilters

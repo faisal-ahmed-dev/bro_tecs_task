@@ -11,8 +11,8 @@ const TopNav: React.FC = () => {
   return (
     <header className="flex flex-wrap items-center justify-between px-4 md:px-10 py-3 bg-background shadow-sm dark:bg-gray-900 dark:text-white">
     {/* Search Field */}
-    <div className="relative flex items-center w-full md:max-w-lg">
-    
+    <div className="relative flex items-center w-full md:max-w-lg p-4 ml-1 text-2xl font-bold  text-foreground">
+    Brotecs Technologies
     </div>
   
     {/* Notification and Profile */}
