@@ -73,7 +73,6 @@ const EmployeeForm = ({ open, onOpenChange, employee, onSubmit }: EmployeeFormPr
     onSubmit({
       ...values,
       profilePicture: values.profilePicture || null,
-      id: employee?.id || Date.now().toString(), // Generate ID here
     });
     onOpenChange(false);
   };

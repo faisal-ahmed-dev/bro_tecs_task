@@ -5,11 +5,8 @@ import { useEffect, useState } from 'react';
 import { Employee } from '@/types/employee';
 import { fetchEmployees } from '@/services/employeeApi';
 import { Skeleton } from '@/components/ui/skeleton';
-import { Plus } from 'lucide-react';
-import { useTheme } from 'next-themes';
 
 import { EmployeeCard } from '@/components/EmployeeCard';
-import { Button } from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
 
@@ -18,7 +15,6 @@ const CardViewPage = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
-  const { theme, setTheme } = useTheme();
 
   useEffect(() => {
     const loadData = async () => {
@@ -34,17 +30,6 @@ const CardViewPage = () => {
     loadData();
   }, []);
 
-  const handleEdit = (employee: Employee) => {
-    // Implement edit functionality
-    console.log('Edit employee:', employee);
-  };
-
-  const handleDelete = (id: number) => {
-    // Implement delete functionality with confirmation
-    if (window.confirm('Are you sure you want to delete this employee?')) {
-      setEmployees(employees.filter(emp => emp.id !== id));
-    }
-  };
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -104,8 +89,6 @@ const CardViewPage = () => {
           <EmployeeCard
             key={employee.id}
             employee={employee}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
           />
         ))}
       </div>

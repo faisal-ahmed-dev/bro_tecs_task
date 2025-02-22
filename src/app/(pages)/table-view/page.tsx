@@ -18,7 +18,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { fetchEmployees } from '@/services/employeeApi';
-import toast, { Toaster } from 'react-hot-toast';
+import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/Button';
 import Input from '@/components/ui/Input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
@@ -32,7 +32,7 @@ const TablePage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
-  const [employeeToDelete, setEmployeeToDelete] = useState<string | null>(null);
+  const [employeeToDelete, setEmployeeToDelete] = useState<number | null>(null);
   const debouncedSearch = useDebounce(searchTerm, 300);
 
   useEffect(() => {
@@ -41,11 +41,7 @@ const TablePage = () => {
         const response = await fetchEmployees();
         setEmployees(response.data);
       } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Error",
-          description: "Failed to load employees. Please try again later.",
-        });
+        toast("Error loading employees"+error);
       } finally {
         setLoading(false);
       }
@@ -53,7 +49,7 @@ const TablePage = () => {
     loadEmployees();
   }, [toast]);
 
-  const handleDelete = (id: string) => {
+  const handleDelete = (id: number) => {
     setEmployeeToDelete(id);
     setDeleteConfirmOpen(true);
   };
@@ -61,33 +57,30 @@ const TablePage = () => {
   const confirmDelete = () => {
     if (employeeToDelete) {
       setEmployees(prev => prev.filter(emp => emp.id !== employeeToDelete));
-      toast({
-        title: "Success",
-        description: "Employee has been deleted successfully.",
-      });
+      toast("Employee deleted successfully");
       setDeleteConfirmOpen(false);
     }
   };
 
-  const handleFormSubmit = (employee: Employee) => {
-    setEmployees(prev => {
-      const exists = prev.some(emp => emp.id === employee.id);
+  const handleFormSubmit = (values: Omit<Employee, 'id'>) => {
+    const newEmployee: Employee = {
+      ...values,
+      id: selectedEmployee?.id || Date.now(),
+    };
+  
+    setEmployees((prev) => {
+      const exists = prev.some((emp) => emp.id === newEmployee.id);
       if (exists) {
-        toast({
-          title: "Success",
-          description: "Employee details updated successfully.",
-        });
-        return prev.map(emp => emp.id === employee.id ? employee : emp);
+        toast("Employee updated successfully");
+        return prev.map((emp) => (emp.id === newEmployee.id ? newEmployee : emp));
       } else {
-        toast({
-          title: "Success",
-          description: "New employee added successfully.",
-        });
-        return [...prev, employee];
+        toast("Employee added successfully");
+        return [...prev, newEmployee];
       }
     });
     setIsFormOpen(false);
   };
+  
 
   const filteredEmployees = employees.filter(employee => {
     const matchesSearch = 
@@ -145,7 +138,6 @@ const TablePage = () => {
           setIsFormOpen(true);
         }}
         onDelete={handleDelete}
-        variant="bordered"
         isLoading={loading}
         emptyText={
           debouncedSearch || statusFilter !== 'all'

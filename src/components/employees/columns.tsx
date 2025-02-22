@@ -1,6 +1,7 @@
 import { ColumnDef } from "@/components/DataTable/DataTable";
 import { Employee } from "@/types/employee";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 export const employeeColumns: ColumnDef<Employee>[] = [
   {
@@ -9,8 +10,10 @@ export const employeeColumns: ColumnDef<Employee>[] = [
     render: (value, row) => (
       <div className="w-10 h-10 relative">
         {value ? (
-          <img
-            src={value}
+          <Image
+            src={String(value)}
+            width={40}
+            height={40}
             alt={row.name}
             className="rounded-full object-cover w-full h-full"
           />
@@ -58,7 +61,7 @@ export const employeeColumns: ColumnDef<Employee>[] = [
     accessorKey: "status",
     header: "Status",
     render: (value) => (
-      <Badge variant={value === 'active' ? 'success' : 'secondary'}>
+      <Badge variant={value === 'active' ? 'default' : 'secondary'}>
         {value}
       </Badge>
     ),

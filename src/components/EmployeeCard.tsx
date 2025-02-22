@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Employee } from '@/types/employee';
-import { Edit, Mail, Map, Phone, Trash2, Eye } from 'lucide-react';
+import { Mail,  Phone, } from 'lucide-react';
 import { motion } from 'framer-motion';
 import {
   Dialog,

@@ -10,7 +10,7 @@ export type ColumnDef<T> = {
   header: string;
   align?: "left" | "center" | "right";
   sortable?: boolean;
-  render?: (value: any, row: T) => React.ReactNode;
+  render?: (value: T[keyof T], row: T) => React.ReactNode;
 };
 
 interface DataTableProps<T> {
@@ -19,12 +19,12 @@ interface DataTableProps<T> {
   isLoading?: boolean;
   emptyText?: string;
   onEdit?: (item: T) => void;
-  onDelete?: (id: string | number) => void;
+  onDelete?: (id:  number) => void;
   variant?: "default" | "bordered";
   className?: string;
 }
 
-const DataTable = <T extends { id: string | number }>({
+const DataTable = <T extends { id: number }>({
   data,
   columns,
   isLoading = false,

@@ -1,8 +1,7 @@
 "use client"
 import React, { useState } from "react";
 import Link from "next/link";
-import { Home, Users, List, Settings } from "lucide-react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../ui/accordion";
+import { Home, Users } from "lucide-react";
 import { Button } from "../ui/Button";
 
 const Sidebar: React.FC = () => {
