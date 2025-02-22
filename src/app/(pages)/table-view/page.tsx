@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useDebounce } from '@/hooks/useDebounce';
 import DataTable from '@/components/DataTable/DataTable';
 import { employeeColumns } from '@/components/employees/columns';
-import { Plus, Filter } from 'lucide-react';
+import { Plus, Filter, Eye } from 'lucide-react';
 import { Employee } from '@/types/employee';
 import EmployeeForm from '@/components/employees/EmployeeForm';
 import {
@@ -27,7 +27,8 @@ import {
 import { fetchEmployees } from '@/services/employeeApi';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/Button';
-import EmployeeFilters from '@/components/EmployeeFilters';
+import EmployeeFilters from '@/components/employees/EmployeeFilters';
+import { EmployeeDetails } from '@/components/employees/EmployeeDetails';
 
 const TablePage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -35,6 +36,8 @@ const TablePage = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFilterSheetOpen, setIsFilterSheetOpen] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [selectedEmployeeDetails, setSelectedEmployeeDetails] = useState<Employee | null>(null); // For View
+  const [viewDialogOpen, setViewDialogOpen] = useState(false); // For View
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [departmentFilter, setDepartmentFilter] = useState<string>('all');
@@ -48,7 +51,7 @@ const TablePage = () => {
       try {
         const response = await fetchEmployees();
         setEmployees(response.data);
-        const uniqueDepartments = Array.from(new Set(response.data.map(e => e.department))).filter(Boolean) as string[];
+        const uniqueDepartments = Array.from(new Set(response.data.map((e) => e.department))).filter(Boolean) as string[];
         setDepartments(uniqueDepartments);
       } catch (error) {
         toast.error("Error loading employees");
@@ -66,7 +69,7 @@ const TablePage = () => {
 
   const confirmDelete = () => {
     if (employeeToDelete) {
-      setEmployees(prev => prev.filter(emp => emp.id !== employeeToDelete));
+      setEmployees((prev) => prev.filter((emp) => emp.id !== employeeToDelete));
       toast.success("Employee deleted successfully");
       setDeleteConfirmOpen(false);
     }
@@ -77,7 +80,7 @@ const TablePage = () => {
       ...values,
       id: selectedEmployee?.id || Date.now(),
     };
-  
+
     setEmployees((prev) => {
       const exists = prev.some((emp) => emp.id === newEmployee.id);
       if (exists) {
@@ -91,8 +94,13 @@ const TablePage = () => {
     setIsFormOpen(false);
   };
 
-  const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = 
+  const handleView = (employee: Employee) => {
+    setSelectedEmployeeDetails(employee);
+    setViewDialogOpen(true);
+  };
+
+  const filteredEmployees = employees.filter((employee) => {
+    const matchesSearch =
       employee.name.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
       employee.email.toLowerCase().includes(debouncedSearch.toLowerCase()) ||
       employee.phone.toLowerCase().includes(debouncedSearch.toLowerCase());
@@ -101,44 +109,21 @@ const TablePage = () => {
     return matchesSearch && matchesStatus && matchesDepartment;
   });
 
-  // Mobile Filters Component
-  const MobileFilters = () => (
-    <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
-      <SheetContent side="right" className="w-full ">
-        <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
-        </SheetHeader>
-        <div className="mt-4">
-          <EmployeeFilters
-            searchTerm={searchTerm}
-            setSearchTerm={setSearchTerm}
-            statusFilter={statusFilter}
-            setStatusFilter={setStatusFilter}
-            departmentFilter={departmentFilter}
-            setDepartmentFilter={setDepartmentFilter}
-            departments={departments}
-            className="flex flex-col gap-4"
-          />
-        </div>
-      </SheetContent>
-    </Sheet>
-  );
-
   return (
     <div className="p-4 md:p-6 space-y-4 md:space-y-6">
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h1 className="text-xl md:text-2xl font-semibold">Employee Management</h1>
         <div className="flex gap-2 w-full sm:w-auto">
-          <Button 
-            onClick={() => setIsFilterSheetOpen(true)} 
+          <Button
+            onClick={() => setIsFilterSheetOpen(true)}
             variant="outline"
             className="sm:hidden flex-1"
           >
             <Filter className="mr-2 h-4 w-4" />
             Filters
           </Button>
-          <Button 
+          <Button
             onClick={() => {
               setSelectedEmployee(null);
               setIsFormOpen(true);
@@ -164,9 +149,6 @@ const TablePage = () => {
         />
       </div>
 
-      {/* Mobile Filters Sheet */}
-      <MobileFilters />
-
       {/* Data Table */}
       <div className="overflow-x-auto">
         <DataTable<Employee>
@@ -177,6 +159,7 @@ const TablePage = () => {
             setIsFormOpen(true);
           }}
           onDelete={handleDelete}
+          onView={handleView} // Add onView prop
           isLoading={loading}
           emptyText={
             debouncedSearch || statusFilter !== 'all' || departmentFilter !== 'all'
@@ -186,7 +169,16 @@ const TablePage = () => {
         />
       </div>
 
-      {/* Forms and Dialogs */}
+      {/* Employee Details Dialog */}
+      {selectedEmployeeDetails && (
+        <EmployeeDetails
+          employee={selectedEmployeeDetails}
+          open={viewDialogOpen}
+          onOpenChange={setViewDialogOpen}
+        />
+      )}
+
+      {/* Employee Form */}
       <EmployeeForm
         open={isFormOpen}
         onOpenChange={setIsFormOpen}
@@ -194,6 +186,7 @@ const TablePage = () => {
         onSubmit={handleFormSubmit}
       />
 
+      {/* Delete Confirmation Dialog */}
       <AlertDialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
@@ -204,7 +197,7 @@ const TablePage = () => {
           </AlertDialogHeader>
           <AlertDialogFooter className="flex-col sm:flex-row gap-2">
             <AlertDialogCancel className="w-full sm:w-auto">Cancel</AlertDialogCancel>
-            <AlertDialogAction 
+            <AlertDialogAction
               onClick={confirmDelete}
               className="w-full sm:w-auto"
             >

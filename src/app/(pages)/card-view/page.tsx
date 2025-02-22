@@ -4,9 +4,10 @@ import { useEffect, useState } from 'react';
 import { Employee } from '@/types/employee';
 import { fetchEmployees } from '@/services/employeeApi';
 import { Skeleton } from '@/components/ui/skeleton';
-import { EmployeeCard } from '@/components/EmployeeCard';
-import EmployeeFilters from '@/components/EmployeeFilters';
+
 import { PageHeader } from '@/components/ui/PageHeader';
+import EmployeeFilters from '@/components/employees/EmployeeFilters';
+import EmployeeCard from '@/components/employees/EmployeeCard';
 
 const CardViewPage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);

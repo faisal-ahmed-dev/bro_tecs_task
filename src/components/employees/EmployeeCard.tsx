@@ -3,36 +3,17 @@ import { Employee } from '@/types/employee';
 import { 
   Mail, 
   Phone, 
-  Building2, 
-  MapPin, 
   Circle, 
-  Calendar, 
-  Clock,
-  Briefcase,
-  Badge,
-  User
 } from 'lucide-react';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
 import { Badge as UIBadge } from "@/components/ui/badge";
 import Image from 'next/image';
-import { EmployeeDetails } from './employees/EmployeeDetails';
+import { EmployeeDetails } from './EmployeeDetails';
 
 interface EmployeeCardProps {
   employee: Employee;

@@ -1,13 +1,13 @@
 import React from "react";
 import { Search, X, Users, Building2 } from "lucide-react";
-import Input from "./ui/Input";
+import Input from "../ui/Input";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/Select";
+} from "../ui/Select";
 
 interface EmployeeFiltersProps {
   searchTerm: string;
@@ -37,7 +37,7 @@ const EmployeeFilters = ({
   return (
     <div className={`
       bg-background
-      ${isSheet ? 'p-0' : 'rounded-lg shadow-sm border p-4'}
+      ${isSheet ? 'p-0' : 'rounded-lg shadow-sm border p-2'}
       ${className}
     `}>
       <div className={`
@@ -45,7 +45,7 @@ const EmployeeFilters = ({
         ${isSheet ? 'items-stretch' : 'sm:flex-row sm:items-center'}
       `}>
         {/* Search Input */}
-        <div className="relative flex-1">
+        <div className="relative flex-1 rounded-2xl">
           <Search 
             className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" 
           />
@@ -54,7 +54,7 @@ const EmployeeFilters = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className={`
-              pl-9 pr-8
+              pl-9 pr-8 py-2 rounded-lg
               ${isSheet ? 'w-full' : ''}
               placeholder:text-muted-foreground
             `}
