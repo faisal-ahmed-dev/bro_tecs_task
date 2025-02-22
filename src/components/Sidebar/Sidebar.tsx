@@ -1,16 +1,9 @@
-"use client";
+"use client"
 import React, { useState } from "react";
-import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import Link from "next/link";
-import {
-  Home as DashboardIcon,
-  ShoppingCart as PurchaseIcon,
-  Building as BusinessUnitIcon,
-  List as CatalogIcon,
-  Users as UserIcon,
-  Settings as SettingsIcon,
-} from "lucide-react";
-import Button from "../ui/Button";
+import { Home, Users, List, Settings } from "lucide-react";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "../ui/accordion";
+import { Button } from "../ui/Button";
 
 const Sidebar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,92 +16,26 @@ const Sidebar: React.FC = () => {
           GENPOS
         </div>
         <nav className="mt-4 text-sm flex-1">
-          <Accordion type="multiple" defaultValue={["business-unit"]}>
-            <ul>
-              {/* Dashboard */}
-              <li className="mb-2">
-                <Link href="/" className="flex items-center p-2 rounded-md hover:bg-muted">
-                  <DashboardIcon className="mx-3 w-5 h-5" />
-                  Dashboard
-                </Link>
-              </li>
-
-              {/* Purchase Dropdown */}
-              <AccordionItem value="purchase">
-                <AccordionTrigger className="flex items-center p-2 rounded-md hover:bg-muted">
-                  <PurchaseIcon className="mx-3 w-5 h-5" />
-                  Purchase
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="pl-8">
-                    <li className="mb-1">
-                      <Link href="/purchase/orders" className="block p-2 rounded-md hover:bg-muted">
-                        Orders
-                      </Link>
-                    </li>
-                    <li className="mb-1">
-                      <Link href="/purchase/invoices" className="block p-2 rounded-md hover:bg-muted">
-                        Invoices
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/purchase/suppliers" className="block p-2 rounded-md hover:bg-muted">
-                        Suppliers
-                      </Link>
-                    </li>
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-
-              {/* Business Unit Dropdown */}
-              <AccordionItem value="business-unit">
-                <AccordionTrigger className="flex items-center p-2 rounded-md hover:bg-muted">
-                  <BusinessUnitIcon className="mx-3 w-5 h-5" />
-                  Business Unit
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="pl-8">
-                    <li className="mb-1">
-                      <Link href="/business/departments" className="block p-2 rounded-md hover:bg-muted">
-                        Groups
-                      </Link>
-                    </li>
-                    <li className="mb-1">
-                      <Link href="/companies" className="block p-2 rounded-md hover:bg-muted">
-                        Companies
-                      </Link>
-                    </li>
-                    <li className="mb-1">
-                      <Link href="/business/brands" className="block p-2 rounded-md hover:bg-muted">
-                        Brands
-                      </Link>
-                    </li>
-                    <li className="mb-1">
-                      <Link href="/business/outlets" className="block p-2 rounded-md hover:bg-muted">
-                        Outlets
-                      </Link>
-                    </li>
-                    <li>
-                      <Link href="/business/warehouses" className="block p-2 rounded-md hover:bg-muted">
-                        Warehouses
-                      </Link>
-                    </li>
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            </ul>
-          </Accordion>
+          <ul>
+            <li>
+              <Link href="/card-view" className="flex items-center p-2 rounded-md hover:bg-muted">
+                <Home className="mx-3 w-5 h-5" />
+                Card View
+              </Link>
+            </li>
+            <li>
+              <Link href="/table-view" className="flex items-center p-2 rounded-md hover:bg-muted">
+                <Users className="mx-3 w-5 h-5" />
+                Table View
+              </Link>
+            </li>
+          </ul>
         </nav>
       </div>
 
       {/* Mobile Sidebar */}
       <div className="md:hidden">
-        <Button
-          onClick={() => setIsOpen(true)}
-          variant="outline"
-          size="icon"
-          className="m-2"
-        >
+        <Button onClick={() => setIsOpen(true)} variant="outline" size="icon" className="m-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -127,11 +54,7 @@ const Sidebar: React.FC = () => {
         >
           <div className="p-4 text-xl font-bold border-b flex justify-between items-center text-foreground">
             GENPOS
-            <Button
-              onClick={() => setIsOpen(false)}
-              variant="ghost"
-              size="icon"
-            >
+            <Button onClick={() => setIsOpen(false)} variant="ghost" size="icon">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -146,48 +69,21 @@ const Sidebar: React.FC = () => {
           </div>
           <nav className="mt-4 flex-1">
             <ul>
-              <li className="mb-2">
-                <Link href="/" className="flex items-center p-2 rounded-md hover:bg-muted">
-                  <DashboardIcon className="mx-3 w-5 h-5" />
-                  Dashboard
+              <li>
+                <Link href="/card-view" className="flex items-center p-2 rounded-md hover:bg-muted">
+                  <Home className="mx-3 w-5 h-5" />
+                  Card View
                 </Link>
               </li>
-              <Accordion type="multiple" defaultValue={["business-unit"]}>
-                <AccordionItem value="purchase">
-                  <AccordionTrigger className="flex items-center p-2 rounded-md hover:bg-muted">
-                    <PurchaseIcon className="mx-3 w-5 h-5" />
-                    Purchase
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <ul className="pl-8">
-                      <li className="mb-1">
-                        <Link href="/purchase/orders" className="block p-2 rounded-md hover:bg-muted">
-                          Orders
-                        </Link>
-                      </li>
-                      <li className="mb-1">
-                        <Link href="/purchase/invoices" className="block p-2 rounded-md hover:bg-muted">
-                          Invoices
-                        </Link>
-                      </li>
-                      <li>
-                        <Link href="/purchase/suppliers" className="block p-2 rounded-md hover:bg-muted">
-                          Suppliers
-                        </Link>
-                      </li>
-                    </ul>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+              <li>
+                <Link href="/table-view" className="flex items-center p-2 rounded-md hover:bg-muted">
+                  <Users className="mx-3 w-5 h-5" />
+                  Table View
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
-        {isOpen && (
-          <div
-            className="fixed inset-0 bg-black opacity-50"
-            onClick={() => setIsOpen(false)}
-          ></div>
-        )}
       </div>
     </div>
   );

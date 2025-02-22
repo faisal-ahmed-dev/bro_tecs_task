@@ -1,7 +1,7 @@
 import React from "react";
 import "./globals.css";
 import Sidebar from "../components/Sidebar/Sidebar";
-import TopNav from "../components/TopNav";
+import TopNav from "../components/TopNav/TopNav";
 import { ThemeProvider } from "next-themes";
 
 interface RootLayoutProps {

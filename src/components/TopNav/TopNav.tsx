@@ -3,7 +3,7 @@ import { BellRing, Search } from "lucide-react";
 import { TbDrone } from "react-icons/tb";
 import { PiChatsBold } from "react-icons/pi";
 import { IoMdSettings } from "react-icons/io";
-import ThemeToggle from "./ui/ThemeToggle"; 
+import ThemeToggle from "../ui/ThemeToggle"; 
 
 const TopNav: React.FC = () => {
   return (
