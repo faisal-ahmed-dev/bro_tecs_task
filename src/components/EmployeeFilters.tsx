@@ -34,7 +34,7 @@ const EmployeeFilters = ({
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 h-5 w-5" />
           <Input
-            placeholder="Search by name, email, or phone..."
+            placeholder="Search by name or email"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="pl-10 h-11 text-base dark:bg-gray-700 dark:text-white dark:border-gray-600"
@@ -59,8 +59,6 @@ const EmployeeFilters = ({
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="inactive">Inactive</SelectItem>
-              <SelectItem value="onLeave">On Leave</SelectItem>
-              <SelectItem value="remote">Remote</SelectItem>
             </SelectContent>
           </Select>
 

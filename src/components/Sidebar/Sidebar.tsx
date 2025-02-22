@@ -51,21 +51,6 @@ const Sidebar: React.FC = () => {
             isOpen ? "translate-x-0" : "-translate-x-full"
           } transition-transform duration-300 ease-in-out z-50`}
         >
-          <div className="p-4 text-xl font-bold border-b flex justify-between items-center text-foreground">
-            GENPOS
-            <Button onClick={() => setIsOpen(false)} variant="ghost" size="icon">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </Button>
-          </div>
           <nav className="mt-4 flex-1">
             <ul>
               <li>
