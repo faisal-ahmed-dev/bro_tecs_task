@@ -17,6 +17,8 @@ interface EmployeeFiltersProps {
   departmentFilter: string;
   setDepartmentFilter: (value: string) => void;
   departments: string[];
+  className?: string;
+  variant?: 'default' | 'sheet';
 }
 
 const EmployeeFilters = ({
@@ -27,47 +29,83 @@ const EmployeeFilters = ({
   departmentFilter,
   setDepartmentFilter,
   departments,
+  className = "",
+  variant = 'default'
 }: EmployeeFiltersProps) => {
+  const isSheet = variant === 'sheet';
+  
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow p-4 mb-6">
-      <div className="flex flex-col lg:flex-row gap-4 items-start lg:items-center">
+    <div className={`
+      bg-background
+      ${isSheet ? 'p-0' : 'rounded-lg shadow-sm border p-4'}
+      ${className}
+    `}>
+      <div className={`
+        flex flex-col gap-4
+        ${isSheet ? 'items-stretch' : 'sm:flex-row sm:items-center'}
+      `}>
+        {/* Search Input */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-300 h-5 w-5" />
+          <Search 
+            className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" 
+          />
           <Input
-            placeholder="Search by name or email"
+            placeholder="Search employees..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 h-11 text-base dark:bg-gray-700 dark:text-white dark:border-gray-600"
+            className={`
+              pl-9 pr-8
+              ${isSheet ? 'w-full' : ''}
+              placeholder:text-muted-foreground
+            `}
           />
           {searchTerm && (
             <button
               onClick={() => setSearchTerm("")}
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-300 dark:hover:text-white"
+              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+              aria-label="Clear search"
             >
               <X className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        <div className="flex gap-3 w-full lg:w-auto">
+        {/* Filters Group */}
+        <div className={`
+          flex gap-3
+          ${isSheet ? 'flex-col' : 'flex-row'}
+          ${isSheet ? 'w-full' : 'sm:w-auto'}
+        `}>
+          {/* Status Filter */}
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full lg:w-[160px] h-11 dark:bg-gray-700 dark:text-white dark:border-gray-600">
-              <Users className="mr-2 h-4 w-4 text-gray-500 dark:text-gray-300" />
+            <SelectTrigger 
+              className={`
+                h-10
+                ${isSheet ? 'w-full' : 'w-[140px]'}
+              `}
+            >
+              <Users className="mr-2 h-4 w-4 text-muted-foreground" />
               <SelectValue placeholder="Status" />
             </SelectTrigger>
-            <SelectContent className="dark:bg-gray-800 dark:text-white">
+            <SelectContent>
               <SelectItem value="all">All Status</SelectItem>
               <SelectItem value="active">Active</SelectItem>
               <SelectItem value="inactive">Inactive</SelectItem>
             </SelectContent>
           </Select>
 
+          {/* Department Filter */}
           <Select value={departmentFilter} onValueChange={setDepartmentFilter}>
-            <SelectTrigger className="w-full lg:w-[180px] h-11 dark:bg-gray-700 dark:text-white dark:border-gray-600">
-              <Building2 className="mr-2 h-4 w-4 text-gray-500 dark:text-gray-300" />
+            <SelectTrigger 
+              className={`
+                h-10
+                ${isSheet ? 'w-full' : 'w-[160px]'}
+              `}
+            >
+              <Building2 className="mr-2 h-4 w-4 text-muted-foreground" />
               <SelectValue placeholder="Department" />
             </SelectTrigger>
-            <SelectContent className="dark:bg-gray-800 dark:text-white">
+            <SelectContent>
               <SelectItem value="all">All Departments</SelectItem>
               {departments.map((dept) => (
                 <SelectItem key={dept} value={dept}>
@@ -78,6 +116,45 @@ const EmployeeFilters = ({
           </Select>
         </div>
       </div>
+
+      {/* Active Filters Display */}
+      {(statusFilter !== 'all' || departmentFilter !== 'all' || searchTerm) && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {searchTerm && (
+            <div className="inline-flex items-center gap-1 text-sm bg-muted px-2 py-1 rounded">
+              <span>Search: {searchTerm}</span>
+              <button
+                onClick={() => setSearchTerm('')}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          )}
+          {statusFilter !== 'all' && (
+            <div className="inline-flex items-center gap-1 text-sm bg-muted px-2 py-1 rounded">
+              <span>Status: {statusFilter}</span>
+              <button
+                onClick={() => setStatusFilter('all')}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          )}
+          {departmentFilter !== 'all' && (
+            <div className="inline-flex items-center gap-1 text-sm bg-muted px-2 py-1 rounded">
+              <span>Department: {departmentFilter}</span>
+              <button
+                onClick={() => setDepartmentFilter('all')}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };
