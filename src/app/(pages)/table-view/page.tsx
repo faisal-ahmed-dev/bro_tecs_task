@@ -104,7 +104,7 @@ const TablePage = () => {
   // Mobile Filters Component
   const MobileFilters = () => (
     <Sheet open={isFilterSheetOpen} onOpenChange={setIsFilterSheetOpen}>
-      <SheetContent side="right" className="w-full sm:w-96">
+      <SheetContent side="right" className="w-full ">
         <SheetHeader>
           <SheetTitle>Filters</SheetTitle>
         </SheetHeader>
