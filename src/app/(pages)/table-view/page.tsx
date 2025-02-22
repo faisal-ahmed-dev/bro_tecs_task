@@ -21,7 +21,7 @@ import {
 import { fetchEmployees } from '@/services/employeeApi';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/Button';
-import { EmployeeFilters } from '@/components/EmployeeFilters';
+import EmployeeFilters from '@/components/EmployeeFilters';
 
 const TablePage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);

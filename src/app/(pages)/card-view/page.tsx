@@ -6,7 +6,7 @@ import { Employee } from '@/types/employee';
 import { fetchEmployees } from '@/services/employeeApi';
 import { Skeleton } from '@/components/ui/skeleton';
 import { EmployeeCard } from '@/components/EmployeeCard';
-import { EmployeeFilters } from '@/components/EmployeeFilters';
+import EmployeeFilters from '@/components/EmployeeFilters';
 
 const CardViewPage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);

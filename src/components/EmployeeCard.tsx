@@ -36,14 +36,18 @@ interface EmployeeCardProps {
   employee: Employee;
 }
 
-const getDepartmentColor = (department: string) => {
-  const colors = {
-    'Engineering': 'bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300',
-    'Marketing': 'bg-purple-500/10 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300',
-    'Sales': 'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300',
-    'HR': 'bg-orange-500/10 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300',
-    'default': 'bg-gray-500/10 text-gray-700 dark:bg-gray-500/20 dark:text-gray-300'
-  };
+type Department = 'Engineering' | 'Marketing' | 'Sales' | 'HR' | string;
+
+const colors: Record<string, string> = {
+  'Engineering': 'bg-blue-500/10 text-blue-700 dark:bg-blue-500/20 dark:text-blue-300',
+  'Marketing': 'bg-purple-500/10 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300',
+  'Sales': 'bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300',
+  'HR': 'bg-orange-500/10 text-orange-700 dark:bg-orange-500/20 dark:text-orange-300',
+  'default': 'bg-gray-500/10 text-gray-700 dark:bg-gray-500/20 dark:text-gray-300'
+};
+
+const getDepartmentColor = (department: Department | undefined) => {
+  if (!department) return colors.default;
   return colors[department] || colors.default;
 };
 
