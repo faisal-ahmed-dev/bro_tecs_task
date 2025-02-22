@@ -5,22 +5,25 @@ import { useEffect, useState } from 'react';
 import { Employee } from '@/types/employee';
 import { fetchEmployees } from '@/services/employeeApi';
 import { Skeleton } from '@/components/ui/skeleton';
-
 import { EmployeeCard } from '@/components/EmployeeCard';
-import Input from '@/components/ui/Input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/Select';
+import { EmployeeFilters } from '@/components/EmployeeFilters';
 
 const CardViewPage = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [departmentFilter, setDepartmentFilter] = useState<string>('all');
+  const [departments, setDepartments] = useState<string[]>([]);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const response = await fetchEmployees();
         setEmployees(response.data);
+        // Extract unique departments
+        const uniqueDepartments = Array.from(new Set(response.data.map(e => e.department))).filter(Boolean) as string[];
+        setDepartments(uniqueDepartments);
       } catch (error) {
         console.error('Error loading employees:', error);
       } finally {
@@ -30,12 +33,13 @@ const CardViewPage = () => {
     loadData();
   }, []);
 
-
   const filteredEmployees = employees.filter(employee => {
-    const matchesSearch = employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         employee.email.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = 
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      employee.email.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || employee.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    const matchesDepartment = departmentFilter === 'all' || employee.department === departmentFilter;
+    return matchesSearch && matchesStatus && matchesDepartment;
   });
 
   if (loading) {
@@ -61,27 +65,15 @@ const CardViewPage = () => {
           <h1 className="text-2xl font-bold">Employee Directory</h1>
         </div>
         
-        <div className="flex gap-4">
-          <Input
-            placeholder="Search employees..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="max-w-sm"
-          />
-          <Select
-            value={statusFilter}
-            onValueChange={setStatusFilter}
-          >
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Filter by status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Status</SelectItem>
-              <SelectItem value="active">Active</SelectItem>
-              <SelectItem value="inactive">Inactive</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
+        <EmployeeFilters
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
+          departmentFilter={departmentFilter}
+          setDepartmentFilter={setDepartmentFilter}
+          departments={departments}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
