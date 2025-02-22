@@ -21,13 +21,6 @@ const TopNav: React.FC = () => {
       </div>
 
       <div className="flex items-center gap-3 ml-auto">
-        <Button
-          variant="outline"
-          size="icon"
-          className="hidden md:flex"
-        >
-          <BellRing className="h-5 w-5" />
-        </Button>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

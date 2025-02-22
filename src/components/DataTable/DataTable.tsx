@@ -18,6 +18,8 @@ export type ColumnDef<T> = {
   header: string;
   align?: 'left' | 'center' | 'right';
   sortable?: boolean;
+  minWidth?: string;
+  maxWidth?: string;
   render?: (value: any, row: T) => React.ReactNode;
 };
 
@@ -28,7 +30,7 @@ interface EnhancedTableProps<T> {
   emptyText?: string;
   onEdit?: (item: T) => void;
   onDelete?: (id: number) => void;
-  onView?: (item: T) => void; // Add onView prop
+  onView?: (item: T) => void;
   className?: string;
 }
 
@@ -39,7 +41,7 @@ const DataTable = <T extends { id: number }>({
   emptyText = 'No data available',
   onEdit,
   onDelete,
-  onView, // Add onView to props
+  onView,
   className,
 }: EnhancedTableProps<T>) => {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -54,6 +56,7 @@ const DataTable = <T extends { id: number }>({
             ? col.render(info.getValue(), info.row.original)
             : info.getValue(),
         enableSorting: col.sortable,
+        size: parseInt(col.minWidth || '0'),
       })
     ),
     ...(onEdit || onDelete || onView
@@ -61,6 +64,7 @@ const DataTable = <T extends { id: number }>({
           columnHelper.display({
             id: 'actions',
             header: '',
+            size: 100,
             cell: (info) => (
               <div className="flex items-center justify-end gap-1">
                 {onView && (
@@ -113,83 +117,103 @@ const DataTable = <T extends { id: number }>({
   });
 
   return (
-    <Card className={className}>
-      <div className="overflow-x-auto">
-        <table className="w-full">
-          <thead className="bg-muted/50">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <th
-                    key={header.id}
-                    className="px-4 py-3 text-sm font-medium text-left whitespace-nowrap"
-                    onClick={header.column.getToggleSortingHandler()}
-                    style={{
-                      cursor: header.column.getCanSort() ? 'pointer' : 'default',
-                    }}
-                  >
-                    <div className="flex items-center gap-1">
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                      {header.column.getCanSort() && (
-                        <div className="flex flex-col">
-                          <ChevronUp
-                            className={`w-3 h-3 ${
-                              header.column.getIsSorted() === 'asc'
-                                ? 'text-primary'
-                                : 'text-muted-foreground'
-                            }`}
-                          />
-                          <ChevronDown
-                            className={`w-3 h-3 -mt-1 ${
-                              header.column.getIsSorted() === 'desc'
-                                ? 'text-primary'
-                                : 'text-muted-foreground'
-                            }`}
-                          />
+    <Card className={`w-full ${className}`}>
+      <div className="relative w-full">
+        <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+          <table className="w-full table-fixed">
+            <thead className="bg-muted/50">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => {
+                    const column = columns[header.index];
+                    return (
+                      <th
+                        key={header.id}
+                        className="px-4 py-3 text-sm font-medium text-left whitespace-nowrap sticky top-0 bg-muted/50"
+                        onClick={header.column.getToggleSortingHandler()}
+                        style={{
+                          cursor: header.column.getCanSort() ? 'pointer' : 'default',
+                          minWidth: column?.minWidth || 'auto',
+                          maxWidth: column?.maxWidth || 'auto',
+                        }}
+                      >
+                        <div className="flex items-center gap-1">
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {header.column.getCanSort() && (
+                            <div className="flex flex-col">
+                              <ChevronUp
+                                className={`w-3 h-3 ${
+                                  header.column.getIsSorted() === 'asc'
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground'
+                                }`}
+                              />
+                              <ChevronDown
+                                className={`w-3 h-3 -mt-1 ${
+                                  header.column.getIsSorted() === 'desc'
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground'
+                                }`}
+                              />
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan={columns.length + (onEdit || onDelete || onView ? 1 : 0)}>
-                  <div className="p-4">Loading...</div>
-                </td>
-              </tr>
-            ) : table.getRowModel().rows.length > 0 ? (
-              table.getRowModel().rows.map((row) => (
-                <tr key={row.id} className="hover:bg-muted/10 transition-colors">
-                  {row.getVisibleCells().map((cell) => (
-                    <td key={cell.id} className="p-4 text-sm">
-                      {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                    </td>
-                  ))}
+                      </th>
+                    );
+                  })}
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td
-                  colSpan={columns.length + (onEdit || onDelete || onView ? 1 : 0)}
-                  className="p-8 text-center text-muted-foreground"
-                >
-                  {emptyText}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+              ))}
+            </thead>
+            <tbody>
+              {isLoading ? (
+                <tr>
+                  <td
+                    colSpan={columns.length + (onEdit || onDelete || onView ? 1 : 0)}
+                    className="p-4"
+                  >
+                    Loading...
+                  </td>
+                </tr>
+              ) : table.getRowModel().rows.length > 0 ? (
+                table.getRowModel().rows.map((row) => (
+                  <tr key={row.id} className="hover:bg-muted/10 transition-colors">
+                    {row.getVisibleCells().map((cell, index) => {
+                      const column = columns[index];
+                      return (
+                        <td
+                          key={cell.id}
+                          className="p-4 text-sm overflow-hidden text-ellipsis"
+                          style={{
+                            minWidth: column?.minWidth || 'auto',
+                            maxWidth: column?.maxWidth || 'auto',
+                          }}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td
+                    colSpan={columns.length + (onEdit || onDelete || onView ? 1 : 0)}
+                    className="p-8 text-center text-muted-foreground"
+                  >
+                    {emptyText}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      <div className="flex items-center justify-between p-4 border-t">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-col sm:flex-row items-center justify-between p-4 border-t gap-4">
+        <div className="flex items-center gap-2 order-2 sm:order-1">
           <Button
             variant="outline"
             size="sm"
@@ -207,7 +231,7 @@ const DataTable = <T extends { id: number }>({
             Next
           </Button>
         </div>
-        <span className="text-sm text-muted-foreground">
+        <span className="text-sm text-muted-foreground order-1 sm:order-2">
           Page {table.getState().pagination.pageIndex + 1} of{' '}
           {table.getPageCount()}
         </span>
