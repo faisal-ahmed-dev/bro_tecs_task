@@ -1,3 +1,4 @@
+// RootLayout.tsx
 import React from "react";
 import "./globals.css";
 import Sidebar from "../components/Sidebar/Sidebar";
@@ -10,13 +11,17 @@ interface RootLayoutProps {
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
   return (
-    <html lang="en">
-      <body className="flex h-screen ">
-        <ThemeProvider attribute="class" >
-          <Sidebar />
-          <div className="flex flex-col flex-1">
-            <TopNav />
-            <main className="flex-1 p-4 overflow-auto">{children}</main>
+    <html lang="en" suppressHydrationWarning>
+      <body className="bg-background">
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <div className="flex min-h-screen">
+            <Sidebar />
+            <div className="flex-1 flex flex-col">
+              <TopNav />
+              <main className="flex-1 p-4 md:p-6 overflow-auto">
+                {children}
+              </main>
+            </div>
           </div>
         </ThemeProvider>
       </body>

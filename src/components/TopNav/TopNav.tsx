@@ -1,8 +1,6 @@
+// TopNav.tsx
 import React from "react";
-import { BellRing, Search } from "lucide-react";
-import { TbDrone } from "react-icons/tb";
-import { PiChatsBold } from "react-icons/pi";
-import { IoMdSettings } from "react-icons/io";
+import { BellRing } from "lucide-react";
 import ThemeToggle from "../ui/ThemeToggle";
 import {
   DropdownMenu,
@@ -12,46 +10,51 @@ import {
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
 import { Button } from "../ui/Button";
-import Input from "../ui/Input";
 
 const TopNav: React.FC = () => {
   return (
-    <header className="flex flex-wrap items-center justify-between px-4 py-3 bg-background shadow-sm dark:bg-background dark:text-foreground">
-      {/* Logo and Search Field */}
-      <div className="flex items-center gap-4 w-full md:w-auto">
-        <div className="text-xl font-bold text-foreground">
+    <header className="sticky top-0 z-20 flex items-center justify-between px-4 md:px-6 py-4 bg-background border-b">
+      {/* Logo - Only visible on mobile */}
+      <div className="md:hidden flex items-center flex-1 ml-12">
+        <h1 className="text-lg font-bold text-foreground">
           Brotecs Technologies
-        </div>
+        </h1>
       </div>
 
-      {/* Notification and Profile */}
-      <div className="flex items-center gap-4 mt-3 md:mt-0">
-        {/* Profile Dropdown */}
+      {/* Right side items */}
+      <div className="flex items-center gap-3 ml-auto">
+        <Button
+          variant="outline"
+          size="icon"
+          className="hidden md:flex"
+        >
+          <BellRing className="h-5 w-5" />
+        </Button>
+
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant="ghost"
-              className="h-10 w-10 rounded-full bg-yellow-400 hover:bg-yellow-500"
-              aria-label="Profile"
+              className="h-8 w-8 rounded-full bg-yellow-400 hover:bg-yellow-500"
             >
-              A
+              <span className="sr-only">Open user menu</span>
+              <span className="text-sm font-medium text-yellow-900">A</span>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-48">
-            <DropdownMenuItem>
-              <span>Profile</span>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuItem className="cursor-pointer">
+              Profile
             </DropdownMenuItem>
-            <DropdownMenuItem>
-              <span>Settings</span>
+            <DropdownMenuItem className="cursor-pointer">
+              Settings
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
-              <span>Sign out</span>
+            <DropdownMenuItem className="cursor-pointer text-red-500">
+              Sign out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        {/* Theme Toggle */}
         <ThemeToggle />
       </div>
     </header>
